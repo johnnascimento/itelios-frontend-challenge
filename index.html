@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--<link rel="stylesheet" type="text/css" href="style.css" />-->
+		<style type="text/css">
+		*{
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+		}	
+		</style>
+		
+		<script type="text/javascript">
+			window.onload = function(){
+				function myFunction(jFile){
+					var myObj = JSON.parse(jFile.responseText);
+					//write my code down here!!!!
+				};
+				
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function(){
+					if(this.readyState == 4 && this.status == 200){
+						myFunction(this);
+					}
+				}
+				xhttp.open("GET", "https://raw.githubusercontent.com/iteliosbrasil/itelios-frontend-challenge/master/products.json", true);
+				xhttp.send();
+			}
+		</script>
+		
+	</head>
+	
+	<body>
+		<div id="product-container">
+		</div>
+	</body>
+	
+</html>
