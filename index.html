@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--<link rel="stylesheet" type="text/css" href="style.css" />-->
+		<style type="text/css">
+		*{
+				margin: 0;
+				padding: 0;
+				border: 0;
+				font-size: 100%;
+				font: inherit;
+		}	
+		</style>
+		
+		<script type="text/javascript">
+			window.onload = function(){
+				
+				var productList, widgetSize, mainItem, mainItemPayCond, itemRecommended, key;
+				productContainer = document.getElementById("product-container");
+
+				function myFunction(jFile){
+					var myObj = JSON.parse(jFile.responseText);
+					
+					//Storing Json values in the variables to ease the process of consulting it.
+					productList = myObj[0].data;
+					widgetSize = productList.widget.size;
+					mainItem = productList.item;
+					mainItemPayCond = mainItem.productInfo.paymentConditions
+					itemRecommended = productList.recommendation;
+					
+					function builderBlock(){
+						for(var i=0; i<widgetSize; i++){
+							//building the image tag up
+				
+						var createStructure = "<div id='" + mainItem.businessId + "' class='siema'><img src='https:" + 
+						mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /></div>";
+							productContainer.innerHTML = createStructure;
+						}
+					};
+					builderBlock();
+				};
+				
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function(){
+					if(this.readyState == 4 && this.status == 200){
+						myFunction(this);
+					}
+				}
+				xhttp.open("GET", "https://raw.githubusercontent.com/johnnascimento/itelios-frontend-challenge/master/products.json", true);
+				xhttp.send();
+			}
+		</script>
+		
+	</head>
+	
+	<body>
+		<div id="product-container">
+		</div>
+	</body>
+	
+</html>
