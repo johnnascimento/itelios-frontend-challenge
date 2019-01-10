@@ -1,16 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!--<link rel="stylesheet" type="text/css" href="style.css" />-->
-		<style type="text/css">
-		*{
-				margin: 0;
-				padding: 0;
-				border: 0;
-				font-size: 100%;
-				font: inherit;
-		}	
-		</style>
+		<link rel="stylesheet" type="text/css" href="style.css" />
 		
 		<script type="text/javascript">
 			window.onload = function(){
@@ -28,14 +19,22 @@
 					mainItemPayCond = mainItem.productInfo.paymentConditions
 					itemRecommended = productList.recommendation;
 					
-					function builderBlock(){
-						for(var i=0; i<widgetSize; i++){
-							//building the image tag up
-				
-						var createStructure = "<div id='" + mainItem.businessId + "' class='siema'><img src='https:" + 
-						mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /></div>";
-							productContainer.innerHTML = createStructure;
+					//Truncating text with ellipsis
+					function truncateString(textElement){
+						if(textElement.length > 100){
+							return textElement.substring(0,100) + "...";
+							
+						}else{
+							return textElement;
 						}
+					}
+					
+					function builderBlock(){
+						var formattedText = truncateString(mainItem.name);
+						var createStructure = "<div id='" + mainItem.businessId + "' class='siema'><img src='https:" + 
+					mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /><p id='product-description'>" +
+					formattedText + "</p><p id='product-prce'> Por: " + mainItem.price + "</p><p id='product-in-instalments'>" + mainItemPayCond + "</p></div>";
+							productContainer.innerHTML = createStructure;
 					};
 					builderBlock();
 				};
@@ -54,8 +53,15 @@
 	</head>
 	
 	<body>
-		<div id="product-container">
+		<div class="siema" id="product-container">
 		</div>
 	</body>
+	
+	<script type="text/javascript" src="siema.min.js"></script>
+	<script type="text/javascript">
+			new Siema({
+				perPage: 3
+			});
+	</script>
 	
 </html>
