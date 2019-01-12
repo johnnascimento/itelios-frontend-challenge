@@ -6,8 +6,9 @@
 		<script type="text/javascript">
 			window.onload = function(){
 				
-				var productList, widgetSize, mainItem, mainItemPayCond, itemRecommended, key;
+				var productList, widgetSize, mainItem, mainItemPayCond, itemRecommended;
 				productContainer = document.getElementById("product-container");
+				recommendedproductContainer = document.getElementById("recommended-products");
 
 				function myFunction(jFile){
 					var myObj = JSON.parse(jFile.responseText);
@@ -16,8 +17,8 @@
 					productList = myObj[0].data;
 					widgetSize = productList.widget.size;
 					mainItem = productList.item;
-					mainItemPayCond = mainItem.productInfo.paymentConditions
 					itemRecommended = productList.recommendation;
+					mainItemPayCond = mainItem.productInfo.paymentConditions
 					
 					//Truncating text with ellipsis
 					function truncateString(textElement){
@@ -29,14 +30,32 @@
 						}
 					}
 					
+					//Function responsible for defining obj's value and responsible for  creating the HTML code
 					function builderBlock(){
 						var formattedText = truncateString(mainItem.name);
-						var createStructure = "<div id='" + mainItem.businessId + "' class='siema'><img src='https:" + 
-					mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /><p id='product-description'>" +
-					formattedText + "</p><p id='product-prce'> Por: " + mainItem.price + "</p><p id='product-in-instalments'>" + mainItemPayCond + "</p></div>";
-							productContainer.innerHTML = createStructure;
+						var createStructure = "<h3>Você visitou:</h3><div id='" + mainItem.businessId + "'><img src='https:" + 
+						mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /><p id='product-description'>" +
+						formattedText + "</p><p id='product-prce'> Por: " + mainItem.price + "</p><p id='product-in-instalments'>" +
+						mainItemPayCond + "</p></div>";
+						
+						//Exihibiting the content on the screen
+						productContainer.innerHTML = createStructure;
 					};
 					builderBlock();
+					
+					function builderBlockRec(){
+					var formattedTextRed;
+					var createStructureRec = "<h3>e talvez se interesse por:</h3>";
+						for(var i=0; i<itemRecommended.length; i++){
+							formattedTextRed = truncateString(itemRecommended[i].name);
+							createStructureRec += "<div class='singularRecItem'><img src='https:" + itemRecommended[i].imageName +"' alt='" +
+							itemRecommended[i].businessId +	"' class='productImage' /><p id='product-description'>" + formattedTextRed +
+							"</p><p id='product-prce'> Por: " + itemRecommended[i].price + "</p><p id='product-in-instalments'>" +
+							itemRecommended[i].productInfo.paymentConditions + "</p></div>";
+						}
+						recommendedproductContainer.innerHTML = createStructureRec;
+					};
+					builderBlockRec();
 				};
 				
 				var xhttp = new XMLHttpRequest();
@@ -53,7 +72,11 @@
 	</head>
 	
 	<body>
-		<div class="siema" id="product-container">
+		<div class="wrapping-products-container" id="">
+			<div class="productVisited" id="product-container">
+			</div>
+			<div class="siema productRecommended" id="recommended-products">
+			</div>
 		</div>
 	</body>
 	
