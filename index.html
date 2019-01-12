@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:400,500,500i,700,700i" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		
 		<script type="text/javascript">
 			window.onload = function(){
 				
-				var productList, widgetSize, mainItem, mainItemPayCond, itemRecommended;
+				var productList, widgetSize, mainItem, mainItemPayCond, itemRecommended, addButton, singleListItem, productContainer, recommendedProductContainer, recommendedProductList;
+				
 				productContainer = document.getElementById("product-container");
-				recommendedproductContainer = document.getElementById("recommended-products");
-
+				recommendedProductContainer = document.getElementById("recommended-products");
+				recommendedProductList = document.getElementById("products-list");
+				recommendedProductHeader = document.getElementById("product-header");
+				singleListItem = document.getElementById("single-item");
+				
 				function myFunction(jFile){
 					var myObj = JSON.parse(jFile.responseText);
 					
@@ -18,14 +24,14 @@
 					widgetSize = productList.widget.size;
 					mainItem = productList.item;
 					itemRecommended = productList.recommendation;
-					mainItemPayCond = mainItem.productInfo.paymentConditions
+					mainItemPayCond = mainItem.productInfo.paymentConditions;
 					
 					//Truncating text with ellipsis
 					function truncateString(textElement){
-						if(textElement.length > 100){
-							return textElement.substring(0,100) + "...";
+						if(textElement.length > 80){
+							return textElement.substring(0,80) + "...";
 							
-						}else{
+							}else{
 							return textElement;
 						}
 					}
@@ -33,59 +39,84 @@
 					//Function responsible for defining obj's value and responsible for  creating the HTML code
 					function builderBlock(){
 						var formattedText = truncateString(mainItem.name);
-						var createStructure = "<h3>Você visitou:</h3><div id='" + mainItem.businessId + "'><img src='https:" + 
-						mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /><p id='product-description'>" +
-						formattedText + "</p><p id='product-prce'> Por: " + mainItem.price + "</p><p id='product-in-instalments'>" +
-						mainItemPayCond + "</p></div>";
+						var createStructure = "<div class='mainProductHeader'><h3>Você visitou:</h3></div><div id='chosen-product' class='chosenProduct'><img src='https:" + 
+						mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /><div id='product-description'>" +
+						formattedText + "</div><div id='product-prce'> Por: " + mainItem.price + "</div><div id='product-in-instalments'>" +
+						mainItemPayCond + "</div></div>";
 						
 						//Exihibiting the content on the screen
 						productContainer.innerHTML = createStructure;
-					};
+					}
 					builderBlock();
 					
 					function builderBlockRec(){
-					var formattedTextRed;
-					var createStructureRec = "<h3>e talvez se interesse por:</h3>";
+						var formattedTextRed = "";
+						var createStructureRec = "";
+						var recommendedHeader = document.createElement("h3");
+						var y = document.createTextNode("e talvez se interesse por:");
+						recommendedHeader.appendChild(y);
+						recommendedProductHeader.appendChild(recommendedHeader);
+						
+						//recommendedProductHeader.innerHTML = createStructureTitle
+						
 						for(var i=0; i<itemRecommended.length; i++){
 							formattedTextRed = truncateString(itemRecommended[i].name);
-							createStructureRec += "<div class='singularRecItem'><img src='https:" + itemRecommended[i].imageName +"' alt='" +
+							createStructureRec += "<li class='slide' id='single-item'><img src='https:" + itemRecommended[i].imageName +"' alt='" +
 							itemRecommended[i].businessId +	"' class='productImage' /><div id='product-description'>" + formattedTextRed +
 							"</div><div id='product-prce'> Por: " + itemRecommended[i].price + "</div><div id='product-in-instalments'>" +
-							itemRecommended[i].productInfo.paymentConditions + "</div></div>";
+							itemRecommended[i].productInfo.paymentConditions +
+							"</div><button type='button' class='addButton' id='add-button'>Adicionar ao carrinho <i class='material-icons md-18 orange600'>add_shopping_cart</i></button></li>";
 						}
-						recommendedproductContainer.innerHTML = createStructureRec;
-					};
+						recommendedProductList.innerHTML = createStructureRec;
+					}
 					builderBlockRec();
-				};
+					
+					//This function needs fixing
+					recommendedProductList.addEventListener("mouseenter", function(){
+						addButton = document.getElementById("add-button");
+						addButton.style.visibility = "visible";
+					});
+					
+					recommendedProductList.addEventListener("mouseleave", function(){
+						addButton = document.getElementById("add-button");
+						addButton.style.visibility = "hidden";
+					});
+				}
 				
 				var xhttp = new XMLHttpRequest();
 				xhttp.onreadystatechange = function(){
 					if(this.readyState == 4 && this.status == 200){
 						myFunction(this);
 					}
-				}
+				};
 				xhttp.open("GET", "https://raw.githubusercontent.com/johnnascimento/itelios-frontend-challenge/master/products.json", true);
 				xhttp.send();
-			}
+			};
 		</script>
 		
 	</head>
 	
 	<body>
-		<div class="wrapping-products-container" id="">
-			<div class="productVisited" id="product-container">
+		<div class="wrapContent" id="wrap-content-container">
+			<div class="productContainer" id="product-container">
 			</div>
-			<div class="productRecommended" id="recommended-products">
-			
+			<div class="wrapRecProducts" id="recommended-products">
+				<div id="product-header">
+				</div>
+				<input type="radio" class="slide-controller" name="slide" checked />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				<input type="radio" class="slide-controller" name="slide" />
+				
+				<ul class="slideList" id="products-list"></ul>
 			</div>
 		</div>
 	</body>
-	
-	<!--<script type="text/javascript" src="siema.min.js"></script>
-	<script type="text/javascript">
-			new Siema({
-				perPage: 3
-			});
-	</script>-->
 	
 </html>
