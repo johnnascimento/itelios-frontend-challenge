@@ -15,7 +15,7 @@
 				recommendedProductList = document.getElementById("products-list");
 				recommendedProductHeader = document.getElementById("product-header");
 				singleListItem = document.getElementById("single-item");
-				
+
 				function myFunction(jFile){
 					var myObj = JSON.parse(jFile.responseText);
 					
@@ -28,21 +28,40 @@
 					
 					//Truncating text with ellipsis
 					function truncateString(textElement){
-						if(textElement.length > 80){
-							return textElement.substring(0,80) + "...";
+						if(textElement.length > 100){
+							return textElement.substring(0,100) + "...";
 							
 							}else{
-							return textElement;
+							return textElement.substring(0,999);
+						}
+					}
+					
+					function splitString(textElementP){
+						if(textElementP != false && textElementP != undefined){
+							var findIndex1 = textElementP.indexOf("ou");
+							var findIndex2 = textElementP.indexOf("sem");
+							var findIndex3 = textElementP.indexOf("até");
+							//Return the words OU
+							var textVar1 = textElementP.substring(findIndex1, (findIndex1 + 3));
+							//Return the words SEM JUROS
+							var textVar2 = textElementP.substring(findIndex2, (findIndex2 + 9));
+							//Return the words from ATÉ to right before SEM
+							var textVar3 = textElementP.substring(findIndex3, (findIndex2 - findIndex3)+ 3);
+						return textElementP = "<span>" + textVar1 + "</span><span class='highlightedPrice'>" + textVar3 + "</span><span>" + textVar2 + "</span>"
+						}else{
+							return alert("ops!");
 						}
 					}
 					
 					//Function responsible for defining obj's value and responsible for  creating the HTML code
 					function builderBlock(){
 						var formattedText = truncateString(mainItem.name);
-						var createStructure = "<div class='mainProductHeader'><h3>Você visitou:</h3></div><div id='chosen-product' class='chosenProduct'><img src='https:" + 
-						mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /><div id='product-description'>" +
-						formattedText + "</div><div id='product-prce'> Por: " + mainItem.price + "</div><div id='product-in-instalments'>" +
-						mainItemPayCond + "</div></div>";
+						var formattedPrice = splitString(mainItemPayCond)
+						var createStructure = "<div class='mainProductHeader'><h3>Você visitou:</h3></div><div id='chosen-product' class='chosenProduct boxProducts'><img src='https:" + 
+						mainItem.imageName +"' alt='" + mainItem.businessId + "' class='productImage' /><div id='product-description' class='mainProductBodyText'>" +
+						formattedText + "</div><div id='product-price' class='productPrice'><span>Por:</span> <span class='itemPrice'>" +
+						mainItem.price + "</span></div><div id='product-in-instalments' class='productInInst'>" +
+						formattedPrice + "</div></div>";
 						
 						//Exihibiting the content on the screen
 						productContainer.innerHTML = createStructure;
@@ -51,6 +70,7 @@
 					
 					function builderBlockRec(){
 						var formattedTextRed = "";
+						var formattedPriceRed = "";
 						var createStructureRec = "";
 						var recommendedHeader = document.createElement("h3");
 						var y = document.createTextNode("e talvez se interesse por:");
@@ -60,26 +80,74 @@
 						//recommendedProductHeader.innerHTML = createStructureTitle
 						
 						for(var i=0; i<itemRecommended.length; i++){
+							formattedPriceRed = splitString(itemRecommended[i].productInfo.paymentConditions);
 							formattedTextRed = truncateString(itemRecommended[i].name);
-							createStructureRec += "<li class='slide' id='single-item'><img src='https:" + itemRecommended[i].imageName +"' alt='" +
+							createStructureRec += "<li class='slide boxProducts slide" + i + "' id='single-item'><img src='https:" + itemRecommended[i].imageName +"' alt='" +
 							itemRecommended[i].businessId +	"' class='productImage' /><div id='product-description'>" + formattedTextRed +
-							"</div><div id='product-prce'> Por: " + itemRecommended[i].price + "</div><div id='product-in-instalments'>" +
-							itemRecommended[i].productInfo.paymentConditions +
-							"</div><button type='button' class='addButton' id='add-button'>Adicionar ao carrinho <i class='material-icons md-18 orange600'>add_shopping_cart</i></button></li>";
+							"</div><div id='product-price' class='productPrice'><span>Por:</span> <span class='itemPrice'>" + itemRecommended[i].price +
+							"</span></div><div id='product-in-instalments' class='productInInst'>" +
+							formattedPriceRed +
+							"</div><div class='addButton' id='add-button' ><span>adicionar ao carrinho</span><i class='material-icons md-18 orange600'>add_shopping_cart</i></div></li>";
 						}
 						recommendedProductList.innerHTML = createStructureRec;
 					}
 					builderBlockRec();
 					
-					//This function needs fixing
-					recommendedProductList.addEventListener("mouseenter", function(){
-						addButton = document.getElementById("add-button");
-						addButton.style.visibility = "visible";
+							
+					//Make the slider to functionate forwardly
+					document.getElementById("next-button").addEventListener("click", function(){
+						var currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');;
+						currentCssVarState = parseInt(currentCssVarState);
+						//currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+						switch(currentCssVarState){
+							case 0:
+							recommendedProductList.style.setProperty('--selected-item', '1');
+							currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+							currentCssVarState = parseInt(currentCssVarState);
+							
+							break;
+							case 1:
+							recommendedProductList.style.setProperty('--selected-item', '2');
+							currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+							currentCssVarState = parseInt(currentCssVarState);
+							
+							break;
+							
+							default: 
+							recommendedProductList.style.setProperty('--selected-item', '0');
+							currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+							currentCssVarState = parseInt(currentCssVarState);
+							
+							break;
+						}
+						
 					});
-					
-					recommendedProductList.addEventListener("mouseleave", function(){
-						addButton = document.getElementById("add-button");
-						addButton.style.visibility = "hidden";
+					//Make the slider to functionate forwardly
+					document.getElementById("prev-button").addEventListener("click", function(){
+						var currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');;
+						currentCssVarState = parseInt(currentCssVarState);
+						//currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+						switch(currentCssVarState){
+							case 2:
+							recommendedProductList.style.setProperty('--selected-item', '1');
+							currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+							currentCssVarState = parseInt(currentCssVarState);
+							
+							break;
+							case 1:
+							recommendedProductList.style.setProperty('--selected-item', '0');
+							currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+							currentCssVarState = parseInt(currentCssVarState);
+							
+							break;
+							default:
+							recommendedProductList.style.setProperty('--selected-item', '2');
+							currentCssVarState = getComputedStyle(recommendedProductList).getPropertyValue('--selected-item');
+							currentCssVarState = parseInt(currentCssVarState);
+							
+							break;
+						}
+						
 					});
 				}
 				
@@ -92,6 +160,7 @@
 				xhttp.open("GET", "https://raw.githubusercontent.com/johnnascimento/itelios-frontend-challenge/master/products.json", true);
 				xhttp.send();
 			};
+			
 		</script>
 		
 	</head>
@@ -101,20 +170,19 @@
 			<div class="productContainer" id="product-container">
 			</div>
 			<div class="wrapRecProducts" id="recommended-products">
-				<div id="product-header">
+				<div id="product-header" class="productHeader">
 				</div>
-				<input type="radio" class="slide-controller" name="slide" checked />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				<input type="radio" class="slide-controller" name="slide" />
-				
-				<ul class="slideList" id="products-list"></ul>
+				<div id="wrap-ul-elem">
+					<ul class="slideList" id="products-list"></ul>
+				</div>
+				<div class="prevNextButtons">
+					<div class="prev" id="prev-button">
+						<span> << </span>
+					</div>
+					<div class="next" id="next-button">
+						<span> >> </span>
+					</div>
+				</div>
 			</div>
 		</div>
 	</body>

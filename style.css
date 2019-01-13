@@ -4,18 +4,13 @@ Only initiating on 10/01/18*/
 body{
 	font-family: 'Roboto', sans-serif, arial, Helvetica;
 }
-
-.slide-controller:nth-child(1):checked ~ .wrapRecProducts .slideList{--selected-item: 0;}
-.slide-controller:nth-child(2):checked ~ .wrapRecProducts .slideList{--selected-item: 1;}
-.slide-controller:nth-child(3):checked ~ .wrapRecProducts .slideList{--selected-item: 2;}
-.slide-controller:nth-child(4):checked ~ .wrapRecProducts .slideList{--selected-item: 3;}
-.slide-controller:nth-child(5):checked ~ .wrapRecProducts .slideList{--selected-item: 4;}
-.slide-controller:nth-child(6):checked ~ .wrapRecProducts .slideList{--selected-item: 5;}
-.slide-controller:nth-child(7):checked ~ .wrapRecProducts .slideList{--selected-item: 6;}
-.slide-controller:nth-child(8):checked ~ .wrapRecProducts .slideList{--selected-item: 7;}
-.slide-controller:nth-child(9):checked ~ .wrapRecProducts .slideList{--selected-item: 8;}
-.slide-controller:nth-child(10):checked ~ .wrapRecProducts .slideList{--selected-item: 9;}
-
+.mainProductHeader{
+	text-align: left;
+}
+.mainProductHeader h3{
+	font-weight: bold;
+	margin: 10px;
+}
 .wrapContent{
 	width: 100%;
 	height: auto;
@@ -25,33 +20,76 @@ body{
 .productContainer{
 	width: 20%;
 	height: auto;
-	border: 1px solid #F8F8F8;
+	/*border: 1px solid #F8F8F8;*/
 	float: left;
 	position: relative;
 }
-.productContainer .chosenProduct:hover{
+.chosenProduct{
+	border: 1px solid #F0F0F0
+}
+.chosenProduct:hover{
 	background-image: linear-gradient(#F8F8F8, #FFFFFF, #F8F8F8);
 }
 .chosenProduct img{
 	width: 90%;
+	display: block;
+}
+.chosenProduct .mainProductBodyText{
+	margin: 11% 2% 2% 2% !important;
+}
+.productHeader{
+	text-align: left;
+}
+.productHeader h3{
+	font-weight: bold;
+	margin: 10px;
+}
+#product-description{
+	height: 10.8%;
+	font-weight: normal;
+	font-size: 10px;
+	text-align: justify;
+	margin: 2% 0;
+}
+.productPrice, .productInInst{
+	margin: 4% 0;
+}
+.productPrice span{
+	font-weight: normal;
+	font-size:10px;
+}
+.productPrice span.itemPrice{
+	font-weight: bold;
+	font-size:12px;
+}
+.productInInst{
+	font-weight: normal;
+	font-size: 10px;
+}
+.productInInst .highlightedPrice{
+	font-weight: bold;
+	font-size: 12px;
 }
 .wrapRecProducts{
-	width: 65%;
-	overflow-x: scroll;
-	margin-left: 22%;
-}
-.wrapRecProducts{
+	width: 79%;
+	/*margin-left: 22%;*/
 	overflow: hidden;
+	/*border: 1px solid #F8F8F8;*/
 }
+
+.boxProducts{
+	padding: 10px;
+}
+
 .slideList{	
   --selected-item: 0;
-  --total-items: 5;
+  --total-items: 3;
   list-style-type: none;
   margin: 10px 0;
   padding: 0;
   position: relative;
   left: calc(var(--selected-item) * -100%);
-  width: calc(var(--total-items) * 100%);
+  width: calc(var(--total-items) * 84%);
   transition: left 0.4s cubic-bezier(0.680, -0.550, 0.265, 1.550);
   
   display: grid;
@@ -61,20 +99,88 @@ body{
 
 .slideList .slide{
 	border: 1px solid #F8F8F8;
+	height: 76%;
+}
+.slideList .slide:hover{
+	height: 100%;
+}
+.addButton{
+	font-family: 'Roboto', sans-serif, arial;
+	font-size: 12px;
+	font-weight: normal;
+	background-color: #FFFFFF;
+	width: 75%;
+    padding: 2% 6%;
+    cursor: pointer;
+    border: 1px solid #A0A0A0;
+    margin: 5% 0%;
+	display: block;
+	margin: 10% 2%;
+	visibility: hidden;
+	/*border-left-width: 10px;*/
+}
+.addButton span{
+	position: relative;
+	top: -6px;
+}
+.addButton:hover{
+	background-color: #F8F8F8;
+	border-left-width: 10px;
+	border-color: #FB8C00;
+}
+.material-icons.orange600 { color: #545454; }
+.addButton:hover .material-icons.orange600,
+.addButton:hover ~ .material-icons.orange600,{ color: #FB8C00; }
+
+.slide:hover .addButton,
+.slide:hover ~ .addButton{
+	visibility: visible;
 }
 .slideList .slide:hover{
 	border: 1px solid #F8F8F8;
-	background-image: linear-gradient(#F8F8F8, #FFFFFF, #F8F8F8);
+	background-image: linear-gradient(to bottom, #F5F5F5, #FFFFFF);
 }
 .slide img{
 	width: 100%;
+    display: block;
 }
-.material-icons.orange600 { color: #FB8C00; }
 
-.buttonShown{
-	visibility: visible;
+
+.prevNextButtons{
+	width: 69%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+    top: 35%;
+    left: 26%;
 }
-.buttonHidden{
-	visibility: hidden;
-	
+.prev{
+	width: auto;
+    background: #F0F0F0;
+    padding: 2%;
+    cursor: pointer;
+	border: 1px solid #F0F0F0;
+    border-radius: 100%;
+    margin: auto;
+    float: left;
+	opacity: 0.7;
+}
+.next{
+	width: auto;
+    background: #F0F0F0;
+    padding: 2%;
+    cursor: pointer;
+	border: 1px solid #F0F0F0;
+    border-radius: 100%;
+    margin: auto;
+    display: inline-block;
+    float: right;
+	opacity: 0.7;
+}
+.prev:hover, .next:hover{
+	border: 1px solid #A0A0A0;
+	opacity: 0.8;
 }
