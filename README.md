@@ -29,6 +29,4 @@ O objetivo do desafio é simples: Consumir uma json via xhttp e, com o resultado
  - Também incluí o google material icon através da declaração ".material-icons.orange600...", porém tive dificuldade em editar o estilo do icone, juntamente com o restante do estilo ao redor desse elemento.
  - Infelizmente não utilizei media query para tratar os elementos e editar a forma como os mesmos serão apresentados em dispositivos móveis;
  
- Qualquer dúvida estarei a disposição!
- 
- John Nascimento
+ Qualquer dúvida estarei a disposição.
